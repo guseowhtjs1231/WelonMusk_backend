@@ -5,6 +5,7 @@ import bcrypt
 from django.views import View
 from django.http  import JsonResponse
 from django.db    import IntegrityError
+from django.core.validators import validate_email
 
 from .models      import Users
 from welonmusk.settings import SECRET_KEY
@@ -15,6 +16,7 @@ class UserView(View):
         print('start')
         data = json.loads(request.body)
         try:
+            validate_email(data['email'])
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt() )
 
             Users(
