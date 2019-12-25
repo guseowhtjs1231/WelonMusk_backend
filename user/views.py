@@ -36,6 +36,3 @@ class UserView(View):
 
         except ValidationError as e:
             return JsonResponse({'errorMessage': str(e)}, status = 400)
-
-        except Exception as exception:
-            return JsonResponse({'errorMessage': str(exception)}, status = 500)
