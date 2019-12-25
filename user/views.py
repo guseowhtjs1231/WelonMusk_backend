@@ -29,10 +29,10 @@ class UserView(View):
 
             return JsonResponse({'message':'SUCCESS'}, status = 200)
         except KeyError as e:
-            return JsonResponse({'errorMessage':'there is no ' + str(e) + ' key'}, status = 400)
+            return JsonResponse({'errorMessage':'MISSING_KEY'}, status = 400)
 
         except IntegrityError as e:
-            return JsonResponse({'errorMessage': str(e)}, status = 400)
+            return JsonResponse({'errorMessage': 'DUPLICATED_EMAIL'}, status = 400)
 
         except ValidationError as e:
-            return JsonResponse({'errorMessage': str(e)}, status = 400)
+            return JsonResponse({'errorMessage': 'INVALID_EMAIL'}, status = 400)
