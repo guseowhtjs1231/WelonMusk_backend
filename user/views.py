@@ -11,10 +11,9 @@ from django.core.exceptions import ValidationError
 from .models      import Users
 from welonmusk.settings import SECRET_KEY
 
-class UserView(View):
+class SignUpView(View):
     def post(self, request):
 
-        print('start')
         data = json.loads(request.body)
         try:
             validate_email(data['email'])
@@ -35,4 +34,25 @@ class UserView(View):
             return JsonResponse({'errorMessage': 'DUPLICATED_EMAIL'}, status = 400)
 
         except ValidationError as e:
+            return JsonResponse({'errorMessage': 'INVALID_EMAIL'}, status = 400)
+
+class SignInView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        try:
+            validate_email(data['email'])
+            user = Users.objects.get(email = data['email'])
+            if bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
+                access_token = jwt.encode({'id': user.id}, SECRET_KEY, algorithm='HS256')
+                return JsonResponse({'access_token': access_token.decode('utf-8')}, status=200)
+            else:
+                return JsonResponse({'message':'WRONG_PASSWORD'}, status = 400)
+
+        except KeyError:
+            return JsonResponse({'errorMessage':'MISSING_KEY'}, status = 400)
+
+        except JWTError:
+            return JsonResponse({'errorMessage':'JWT_ERROR'}, status = 400)
+
+        except ValidationError:
             return JsonResponse({'errorMessage': 'INVALID_EMAIL'}, status = 400)
