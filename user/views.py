@@ -9,22 +9,19 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 from .models      import Users
-from .common      import Common
 from welonmusk.settings import SECRET_KEY
 
 class UserView(View):
-    def __init__(self):
-         self.common = Common()
-
     def post(self, request):
 
         data = json.loads(request.body)
         try:
             validate_email(data['email'])
 
-            password_error = self.common.checkPassword(data['password'])
-            if password_error != None:
-                return JsonResponse({'errorMessage': password_error}, status = 400)
+            if len(data['password']) < 8:
+                return JsonResponse({'errorMessage':'SHORT_PASSWORD'}, status = 400)
+            elif not any(c.isupper() for c in data['password']):
+                return JsonResponse({'errorMessage':'NO_CAPITAL_LETTER_PASSWORD'}, status = 400)
 
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt() )
 
