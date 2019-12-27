@@ -6,8 +6,7 @@ class Common(View):
         
         if len(password) < 8:
             return 'SHORT_PASSWORD'
-
-        if not any(c.isupper() for c in password):
+        elif not any(c.isupper() for c in password):
             return 'NO_CAPITAL_LETTER_PASSWORD'
-
-        return None
+        else:
+            return None
