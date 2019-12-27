@@ -11,6 +11,14 @@ from django.core.exceptions import ValidationError
 from .models      import Users
 from welonmusk.settings import SECRET_KEY
 
+def checkPassword(password):
+    if len(password) < 8:
+        return 'SHORT_PASSWORD'
+    if not any(c.isupper() for c in password):
+        return 'NO_CAPITAL_LETTER_PASSWORD'
+    return None
+
+
 class UserView(View):
     def post(self, request):
 
@@ -18,10 +26,9 @@ class UserView(View):
         try:
             validate_email(data['email'])
 
-            if len(data['password']) < 8:
-                return JsonResponse({'errorMessage':'SHORT_PASSWORD'}, status = 400)
-            elif not any(c.isupper() for c in data['password']):
-                return JsonResponse({'errorMessage':'NO_CAPITAL_LETTER_PASSWORD'}, status = 400)
+            password_error = checkPassword(data['password'])
+            if password_error != None:
+                return JsonResponse({'errorMessage': password_error}, status = 400)
 
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt() )
 
