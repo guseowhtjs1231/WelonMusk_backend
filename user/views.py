@@ -25,7 +25,6 @@ class UserView(View):
         data = json.loads(request.body)
         try:
             validate_email(data['email'])
-
             password_error = checkPassword(data['password'])
             if password_error != None:
                 return JsonResponse({'errorMessage': password_error}, status = 400)
@@ -47,4 +46,27 @@ class UserView(View):
             return JsonResponse({'errorMessage': 'DUPLICATED_EMAIL'}, status = 400)
 
         except ValidationError as e:
+            return JsonResponse({'errorMessage': 'INVALID_EMAIL'}, status = 400)
+
+
+class SignInView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        try:
+            validate_email(data['email'])
+            password_error = checkPassword(data['password'])
+            if password_error != None:
+                return JsonResponse({'errorMessage': password_error}, status = 400)
+
+            user = Users.objects.get(email = data['email'])
+            if bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
+                access_token = jwt.encode({'id': user.id}, SECRET_KEY, algorithm='HS256')
+                return JsonResponse({'access_token': access_token.decode('utf-8')}, status=200)
+            else:
+                return JsonResponse({'message':'WRONG_PASSWORD'}, status = 400)
+
+        except KeyError:
+            return JsonResponse({'errorMessage':'MISSING_KEY'}, status = 400)
+
+        except ValidationError:
             return JsonResponse({'errorMessage': 'INVALID_EMAIL'}, status = 400)
