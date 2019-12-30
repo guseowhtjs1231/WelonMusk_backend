@@ -25,7 +25,7 @@ SECRET_KEY = my_settings.WELONMUSK_SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '10.58.6.45', '10.58.6.45:8000']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
