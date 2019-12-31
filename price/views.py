@@ -26,6 +26,7 @@ class ColorPriceView(View):
             color_list = [
             {
                 'model_name' : cars.model_name,
+                'color_id' : CarColors.objects.get(id=car['color_id']).id,
                 'color_price' : car['color_price'],
                 'color_name' : CarColors.objects.get(id=car['color_id']).color_name,
                 'img_url' : CarColors.objects.get(id=car['color_id']).img_url,
