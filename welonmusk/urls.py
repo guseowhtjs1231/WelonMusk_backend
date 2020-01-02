@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-
+from rest_framework_swagger.views import get_swagger_view
 urlpatterns = [
     path('user', include('user.urls')),
+    path('price', include('price.urls')),
+    path('api/doc', get_swagger_view(title='Tesla API manual'))
 ]
