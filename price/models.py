@@ -52,3 +52,11 @@ class CarWheelPrices(models.Model):
 
     class Meta:
         db_table = 'car_wheel_prices'
+
+class CarInteriors(models.Model):
+    interior_en_name = models.CharField(max_length = 50)
+    interior_ko_name = models.CharField(max_length = 50)
+    img_url = models.URLField(max_length=2000)
+
+    class Meta:
+        db_table = 'car_interiors'
