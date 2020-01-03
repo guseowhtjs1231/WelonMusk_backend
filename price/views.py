@@ -45,11 +45,11 @@ class WheelPriceView(View):
             cars = CarModels.objects.prefetch_related('carwheelprices_set').get(id=model_id)
             wheel_list = [
             {
-                'wheel_id'    : car['wheel_id'],
-                'wheel_name'  : CarWheels.objects.get(id=car['wheel_id']).wheel_name,
-                'img_url'     : CarWheels.objects.get(id=car['wheel_id']).img_url,
-                'wheel_price' : round(car['wheel_price'], 0)
-            } for car in list(cars.carwheelprices_set.all().values())]
+                'wheel_id'    : car.wheel_id,
+                'wheel_name'  : car.wheel.wheel_name,
+                'img_url'     : car.wheel.img_url,
+                'wheel_price' : round(car.wheel_price, 0)
+            } for car in list(cars.carwheelprices_set.all())]
 
             return JsonResponse({'message':'SUCCESS','data':wheel_list}, status=200)
 
