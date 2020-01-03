@@ -14,8 +14,6 @@ urlpatterns = [
     path('/engine/<int:model_id>', CarTypeView.as_view()), # type select
 
     path('/color/<int:model_id>', ColorPriceView.as_view()),
-    # path('/color/<int:model_id>', ColorPriceView.as_view()),
-    path('/wheel/<int:model_id>', WheelPriceView.as_view()),
     path('/wheel/<int:model_id>', WheelPriceView.as_view()),
 
     path('/interior/<int:model_id>', InteriorPriceView.as_view()),
