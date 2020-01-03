@@ -49,6 +49,10 @@ class TotalPriceView(View):
         wheel_price = list( car_wheel.carwheelprices_set.filter(model=model_id).values('wheel_price'))[0]['wheel_price']
         total_price += wheel_price
 
+        car_interior = CarInteriors.objects.prefetch_related('carinteriorprices_set').get(id=order.interior.id)
+        interior_price = list( car_interior.carinteriorprices_set.filter(model=model_id).values('interior_price'))[0]['interior_price']
+        total_price += interior_price
+        
         autopilot_price = order.autopilot_price.autopilot_price
         total_price += autopilot_price
 
