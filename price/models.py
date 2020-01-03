@@ -6,6 +6,7 @@ class CarModels(models.Model):
     car_colors = models.ManyToManyField('CarColors', through ='CarColorPrices')
     car_wheels = models.ManyToManyField('CarWheels', through ='CarWheelPrices')
     car_interior = models.ManyToManyField('CarInteriors', through='CarInteriorPrices')
+    car_seats = models.ManyToManyField('CarSeats', through ='CarSeatPrices')
 
     class Meta:
         db_table = 'car_models'
@@ -70,3 +71,17 @@ class CarInteriorPrices(models.Model):
 
     class Meta:
         db_table = 'car_interior_prices'
+
+class CarSeats(models.Model):
+    seat_name = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'car_seats'
+
+class CarSeatPrices(models.Model):
+    model = models.ForeignKey('CarModels', on_delete = models.SET_NULL, null=True)
+    seat = models.ForeignKey('CarSeats', on_delete = models.SET_NULL, null=True)
+    seat_price = models.DecimalField(max_digits = 20, decimal_places = 2)
+
+    class Meta:
+        db_table = 'car_seat_prices'
