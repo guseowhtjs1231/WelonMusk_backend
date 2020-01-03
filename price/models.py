@@ -70,3 +70,25 @@ class CarInteriorPrices(models.Model):
 
     class Meta:
         db_table = 'car_interior_prices'
+
+class CarOrderPrices(models.Model):
+    model = models.ForeignKey('CarModels', on_delete = models.SET_NULL, null=True)
+    type = models.ForeignKey('CarTypes', on_delete = models.SET_NULL, null=True)
+    color = models.ForeignKey('CarColors', on_delete = models.SET_NULL, null=True)
+    payment = models.ForeignKey('CarPaymentOptions', on_delete = models.SET_NULL, null=True)
+    wheel = models.ForeignKey('CarWheels', on_delete = models.SET_NULL, null=True)
+    interior = models.ForeignKey('CarInteriors', on_delete = models.SET_NULL, null=True)
+    seat = models.ForeignKey('CarSeats', on_delete= models.SET_NULL, null=True)
+    autopilot_price = models.ForeignKey('CarAutoPilots', on_delete= models.SET_NULL, null=True)
+
+    expected_price = models.DecimalField(max_digits = 19, decimal_places = 2,null=True)
+    saving_price = models.DecimalField(max_digits = 19, decimal_places = 2,null=True)
+
+    class Meta:
+        db_table = 'car_order_prices'
+
+class CarAutoPilots(models.Model):
+    autopilot_price = models.DecimalField(max_digits = 20, decimal_places = 2)
+
+    class Meta:
+        db_table = 'car_auto_pilot'
