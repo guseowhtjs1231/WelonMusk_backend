@@ -21,6 +21,12 @@ class CarTypePrices(models.Model):
     model = models.ForeignKey('CarModels', on_delete= models.SET_NULL, null=True)
     type = models.ForeignKey('CarTypes', on_delete= models.SET_NULL, null=True)
     basic_price = models.DecimalField(max_digits = 19, decimal_places = 2)
+    acceleration = models.DecimalField(max_digits = 6, decimal_places = 1)
+    fuel_economy = models.DecimalField(max_digits = 6, decimal_places = 0)
+    max_speed = models.DecimalField(max_digits = 6, decimal_places = 0)
+    wheel = models.CharField(max_length = 200)
+    included_options = models.CharField(max_length = 200)
+    img_url = models.URLField(max_length=2000)
 
     class Meta:
         db_table = 'car_type_prices'
