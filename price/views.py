@@ -4,6 +4,7 @@ from .models      import CarModels, CarTypes, CarTypePrices, CarColors
 from .models      import CarSeats
 from .models      import CarWheels
 from .models      import CarInteriors, CarInteriorPrices
+from .models      import CarOrderPrices
 
 class PriceView(View):
     def get(self, request, model_id):
@@ -20,6 +21,41 @@ class PriceView(View):
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
+
+class TotalPriceView(View):
+    SAVING_COST = 6800000
+    def get(self, request, model_id):
+        total_price = 0
+        order = CarOrderPrices.objects.get(id=model_id)
+        cars = CarModels.objects.prefetch_related('cartypeprices_set').get(id=model_id)
+        basic_price = list(cars.cartypeprices_set.filter(type=order.type.id).values('basic_price'))[0]['basic_price']
+        total_price += basic_price
+
+        car_color = CarColors.objects.prefetch_related('carcolorprices_set').get(id=order.color.id)
+        color_price = list( car_color.carcolorprices_set.filter(model=model_id).values('color_price'))[0]['color_price']
+        total_price += color_price
+
+        car_wheel = CarWheels.objects.prefetch_related('carwheelprices_set').get(id=order.wheel.id)
+        wheel_price = list( car_wheel.carwheelprices_set.filter(model=model_id).values('wheel_price'))[0]['wheel_price']
+        total_price += wheel_price
+
+        car_interior = CarInteriors.objects.prefetch_related('carinteriorprices_set').get(id=order.interior.id)
+        interior_price = list( car_interior.carinteriorprices_set.filter(model=model_id).values('interior_price'))[0]['interior_price']
+        total_price += interior_price
+        
+        autopilot_price = order.autopilot_price.autopilot_price
+        total_price += autopilot_price
+
+        order.expected_price = total_price
+        order.saving_price = total_price - TotalPriceView.SAVING_COST
+        order.save()
+
+        prices = {
+            'expected_price' : round(order.expected_price, 0),
+            'saving_price' : round(order.saving_price, 0),
+        }
+
+        return JsonResponse({'message':'SUCCESS', 'price':prices}, status=200)
 
 class ColorPriceView(View):
     def get(self, request, model_id):
