@@ -52,7 +52,7 @@ class TotalPriceView(View):
 
         prices = {
             'expected_price' : round(order.expected_price, 0),
-            'saving_price' : round(order.saving_price, 0),
+            'saving_price'   : round(order.saving_price, 0),
         }
 
         return JsonResponse({'message':'SUCCESS', 'price':prices}, status=200)
@@ -126,6 +126,27 @@ class InteriorPriceView(View):
             } for car in list(cars.carinteriorprices_set.all())]
 
             return JsonResponse({'message':'SUCCESS','data':interior_list}, status=200)
+
+        except CarModels.DoesNotExist:
+            return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
+
+class SpecificationView(View):
+
+    def get(self, request, model_id):
+        try:
+            cars = CarModels.objects.prefetch_related('cartypeprices_set').get(id=model_id)
+            spec_list = [
+            {
+                'model_name'       : car.model.model_name,
+                'model_type'       : car.type.model_type,
+                'acceleration'     : car.acceleration,
+                'fuel_economy'     : car.fuel_economy,
+                'max_speed'        : car.max_speed,
+                'wheel'            : car.wheel,
+                'included_options' : car.included_options
+            } for car in list(cars.cartypeprices_set.all())]
+
+            return JsonResponse({'message':'SUCCESS','data':spec_list}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
