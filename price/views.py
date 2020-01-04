@@ -7,6 +7,7 @@ from .models      import CarWheels
 from .models      import CarInteriors, CarInteriorPrices
 from .models      import CarOrderPrices
 from .models      import CarPaymentOptions
+from .models      import CarAutoPilots
 
 class PriceView(View):
     def get(self, request, model_id):
@@ -14,9 +15,15 @@ class PriceView(View):
             cars = CarModels.objects.prefetch_related('cartypeprices_set').get(id=model_id)
             type_list = [
             {
-                'model_name'  : car.model.model_name,
-                'basic_price' : car.basic_price,
-                'model_type'  : car.type.model_type,
+                'model_name'    : car.model.model_name,
+                'basic_price'   : round(car.basic_price, 0),
+                'model_type'    : car.type.model_type,
+                'type_id'       : car.type.id,
+                'model_type'    : car.type.model_type,
+                'fuel_economy'  : car.fuel_economy,
+                'max_speed'     : car.max_speed,
+                'acceleration'  : car.acceleration,
+                'img_url'       : car.img_url
             } for car in list(cars.cartypeprices_set.all())]
 
             return JsonResponse({'message':'SUCCESS','data':type_list}, status=200)
