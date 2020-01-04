@@ -228,3 +228,17 @@ class CarPaymentOptionView(View):
             return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
         return JsonResponse({'message':'SUCCESS'}, status=200)
+
+class CarAutoPilotView(View):
+
+    def post(self, request, model_id):
+        data = json.loads(request.body)
+
+        if 'autopilot' in data:
+            order = CarOrderPrices.objects.get(id=model_id)
+            order.autopilot_price = CarAutoPilots.objects.get(id = 2 if data['autopilot'] == 'True' else 1)
+            order.save()
+        else:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
+        return JsonResponse({'message':'SUCCESS'}, status=200)
