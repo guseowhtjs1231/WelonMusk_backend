@@ -6,9 +6,11 @@ from .views      import InteriorPriceView
 from .views      import SpecificationView
 from .views      import TotalPriceView
 from .views      import CarPaymentOptionView
+from .views      import CarTypeView
 
 urlpatterns = [
     path('/model/<int:model_id>', PriceView.as_view()),
+    path('/engine/<int:model_id>', CarTypeView.as_view()),
     path('/color/<int:model_id>', ColorPriceView.as_view()),
     path('/seat/<int:model_id>', CarSeatPrice.as_view()),
     path('/wheel/<int:model_id>', WheelPriceView.as_view()),
