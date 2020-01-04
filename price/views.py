@@ -1,6 +1,7 @@
 from django.views import View
 from django.http  import JsonResponse
 from .models      import CarModels, CarTypes, CarTypePrices, CarColors
+from .models      import CarSeats
 from .models      import CarWheels
 from .models      import CarInteriors, CarInteriorPrices
 
@@ -35,6 +36,23 @@ class ColorPriceView(View):
 
             return JsonResponse({'message':'SUCCESS','data':color_list}, status=200)
 
+        except CarModels.DoesNotExist:
+            return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
+
+class CarSeatPrice(View):
+
+    def get(self, request, model_id):
+        try:
+            cars = CarModels.objects.prefetch_related('carseatprices_set').get(id=model_id)
+            seat_list = [
+            {
+                'model_name' : car.model.model_name,
+                'seat_id'    : car.seat.id,
+                'seat_name'  : car.seat.seat_name,
+                'seat_price' : round(car.seat_price, 0)
+            } for car in list(cars.carseatprices_set.all())]
+
+            return JsonResponse({'message':'SUCCESS','data':seat_list}, status=200)
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
 
