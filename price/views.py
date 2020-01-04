@@ -136,6 +136,18 @@ class WheelPriceView(View):
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
 
+    def post(self, request, model_id):
+        data = json.loads(request.body)
+
+        if "wheel_id" in data:
+            order = CarOrderPrices.objects.get(id=model_id)
+            order.wheel = CarWheels.objects.get(id=data['wheel_id'])
+            order.save()
+        else:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
+        return JsonResponse({'message':'SUCCESS'}, status=200)
+
 class InteriorPriceView(View):
 
     def get(self, request, model_id):
