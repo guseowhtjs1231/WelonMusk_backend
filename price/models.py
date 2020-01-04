@@ -72,6 +72,13 @@ class CarInteriorPrices(models.Model):
     class Meta:
         db_table = 'car_interior_prices'
 
+class CarPaymentOptions(models.Model):
+    option = models.CharField(max_length=50)
+    month = models.IntegerField()
+
+    class Meta:
+        db_table = 'car_payment_option'
+
 class CarSeats(models.Model):
     seat_name = models.CharField(max_length=50)
 
