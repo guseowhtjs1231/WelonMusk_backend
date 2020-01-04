@@ -1,3 +1,4 @@
+import json
 from django.views import View
 from django.http  import JsonResponse
 from .models      import CarModels, CarTypes, CarTypePrices, CarColors
@@ -5,6 +6,7 @@ from .models      import CarSeats
 from .models      import CarWheels
 from .models      import CarInteriors, CarInteriorPrices
 from .models      import CarOrderPrices
+from .models      import CarPaymentOptions
 
 class PriceView(View):
     def get(self, request, model_id):
@@ -150,3 +152,31 @@ class SpecificationView(View):
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
+
+class CarPaymentOptionView(View):
+
+    def get(self, request, model_id):
+        try:
+            order = CarOrderPrices.objects.get(id=model_id)
+            if order.payment.option != 'cash':
+                prices = {
+                    'monthly_cost' : round(order.expected_price/order.payment.month, 0),
+                    'saving_cost'  : round(order.saving_price/order.payment.month, 0)
+                }
+                return JsonResponse({'message':'SUCCESS', 'data':prices}, status=200)
+            else:
+                return JsonResponse({'message':'NOT_SUPPORTED_FOR_CASH'}, status = 400)
+        
+        except ZeroDivisionError:
+            return JsonResponse({'message':'SELECT_PAYMENTOPTION_FIRST'}, status = 400)
+
+    def post(self, request, model_id):
+        data = json.loads(request.body)
+        if 'option' in data and 'month' in data:
+            order = CarOrderPrices.objects.get(id=model_id)
+            order.payment = CarPaymentOptions.objects.filter(option=data['option']).get(month=data['month'])
+            order.save()
+        else:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
+        return JsonResponse({'message':'SUCCESS'}, status=200)
