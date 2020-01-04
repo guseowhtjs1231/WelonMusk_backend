@@ -89,6 +89,18 @@ class ColorPriceView(View):
 
         return JsonResponse({'message':'SUCCESS'}, status=200)
 
+class CarTypeView(View):
+    def post(self, request, model_id):
+        data = json.loads(request.body)
+        if "type_id" in data:
+            order = CarOrderPrices.objects.get(id=model_id)
+            order.type = CarTypes.objects.get(id=data['type_id'])
+            order.save()
+        else:
+            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
+        return JsonResponse({'message':'SUCCESS'}, status=200)
+
 class CarSeatPrice(View):
 
     def get(self, request, model_id):
