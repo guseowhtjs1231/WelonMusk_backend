@@ -1,5 +1,6 @@
 ## Introduction
-Clone ordering system on tesla website(https://www.tesla.com/)
+Tesla website clone(https://www.tesla.com/)
+
 
 ## Demo
 [![Watch the video](https://img.youtube.com/vi/JQ6JGS6QFsQ/0.jpg)](https://youtu.be/JQ6JGS6QFsQ)
