@@ -12,7 +12,7 @@ Clone ordering system on tesla website(https://www.tesla.com/)
 
 ## Features
 - Sign up and in features, bcrypt used for user's password hashing
-- Selected options such as color, wheel and autopilot are stored in the database
+- Selected options such as color, wheel and autopilot are stored in MySQL database
 - Provide a specification and parts information per models
 - Available options and prices management per models
 
