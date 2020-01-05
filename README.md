@@ -22,5 +22,5 @@ End point APIs had been defined <a href="https://documenter.getpostman.com/view/
 ## Database modeling
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/blob/master/tesla_erd.png"><img src="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/raw/master/tesla_erd.png" alt="Database ERD" style="max-width:100%;"></a>
 ## Contact me
-Welcome to any ideas or thoughts on this.
+Welcome to any ideas or thoughts on this.<br>
 E-mail : leesangrok1118@gmail.com
