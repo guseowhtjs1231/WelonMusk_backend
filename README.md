@@ -1,27 +1,29 @@
 ## Introduction
-Tesla website clone(https://www.tesla.com/)
-
+Tesla website clone (https://www.tesla.com/)
+Developed by a team of 4 developers (3 Front-End, 1 Back-End)
+[Front-End GitHub Repository](https://github.com/wecode-bootcamp-korea/WelonMusk_frontend)
 
 ## Demo
 [![Watch the video](https://img.youtube.com/vi/JQ6JGS6QFsQ/0.jpg)](https://youtu.be/JQ6JGS6QFsQ)
 
 ## Technologies
-- Endpoint APIs are written in Python
-- Django web framework to implement applications
+- Endpoint APIs were written in Python
+- Utilized Django web framework
 - Deployed in AWS with MySQL RDS
-- CORS headers are used for cross-origin requests and data transfers 
+- CORS headers were used for cross-origin requests and data transfers 
 
 ## Features
-- Sign up and in features, bcrypt used for user's password hashing
-- Selected options such as color, wheel and autopilot are stored in MySQL database
-- Provide a specification and parts information per models
-- Available options and prices management per models
+- Sign-up and Sign-in features (Used Bcrypt for user password hashing)
+- Selected options such as colors, wheels, and autopilot are stored in MySQL database
+- Provided specifications and parts information for each model
+- Price estimation depending on user's choice of available options
 
-## API documentation
-End point APIs had been defined <a href="https://documenter.getpostman.com/view/9816664/SWLcdorr?version=latest" target="_blank">here</a> using Postman throughout this project in order to keep track of the progress of API implementations and communicate which data was needed with frontend developers.
+## API Documentation
+Endpoint APIs were defined <a href="https://documenter.getpostman.com/view/9816664/SWLcdorr?version=latest" target="_blank">here</a> using Postman throughout this project to keep track of API implementations and communicate better with Front-End team members.
 
 ## Database modeling
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/blob/master/tesla_erd.png"><img src="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/raw/master/tesla_erd.png" alt="Database ERD" style="max-width:100%;"></a>
+
 ## Contact me
-Welcome to any ideas or thoughts on this.<br>
+Please share your thoughts on this project.<br>
 E-mail : leesangrok1118@gmail.com
