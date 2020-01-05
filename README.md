@@ -17,7 +17,7 @@ Clone ordering system on tesla website(https://www.tesla.com/)
 - Available options and prices management per models
 
 ## API documentation
-End point APIs had been defined <a href="https://documenter.getpostman.com/view/9816664/SWLcdorr?version=latest" target="_blank">here</a> using Postman throughout this project in order to keep track of the progress of API implementations.
+End point APIs had been defined <a href="https://documenter.getpostman.com/view/9816664/SWLcdorr?version=latest" target="_blank">here</a> using Postman throughout this project in order to keep track of the progress of API implementations and communicate which data is needed with frontend developers.
 
 ## Database modeling
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/blob/master/tesla_erd.png"><img src="https://github.com/wecode-bootcamp-korea/WelonMusk_backend/raw/master/tesla_erd.png" alt="Database ERD" style="max-width:100%;"></a>
