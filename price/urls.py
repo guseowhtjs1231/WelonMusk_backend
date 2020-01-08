@@ -1,13 +1,17 @@
 from django.urls import path
-from .views      import PriceView, ColorPriceView
-from .views      import CarSeatPrice
-from .views      import WheelPriceView
-from .views      import InteriorPriceView
-from .views      import SpecificationView
-from .views      import TotalPriceView
-from .views      import CarPaymentOptionView
-from .views      import CarTypeView
-from .views      import CarAutoPilotView
+
+from .views      import (
+    PriceView,
+    ColorPriceView,
+    CarSeatPrice,
+    WheelPriceView,
+    InteriorPriceView,
+    SpecificationView,
+    TotalPriceView,
+    CarPaymentOptionView,
+    CarTypeView,
+    CarAutoPilotView
+)
 
 urlpatterns = [
     path('/model/<int:model_id>', PriceView.as_view()),

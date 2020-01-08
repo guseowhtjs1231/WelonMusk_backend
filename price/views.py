@@ -1,19 +1,28 @@
 import json
+
 from django.views import View
 from django.http  import JsonResponse
-from .models      import CarModels, CarTypes, CarTypePrices, CarColors
-from .models      import CarSeats
-from .models      import CarWheels
-from .models      import CarInteriors, CarInteriorPrices
-from .models      import CarOrderPrices
-from .models      import CarPaymentOptions
-from .models      import CarAutoPilots
+from django.http  import HttpResponse
+
+from .models      import (
+    CarModels,
+    CarTypes,
+    CarTypePrices,
+    CarColors,
+    CarSeats,
+    CarWheels,
+    CarInteriors,
+    CarInteriorPrices,
+    CarOrderPrices,
+    CarPaymentOptions,
+    CarAutoPilots
+)
 
 class PriceView(View):
     def get(self, request, model_id):
         try:
             cars = CarModels.objects.prefetch_related('cartypeprices_set').get(id=model_id)
-            type_list = [
+            model_data = [
             {
                 'model_name'    : car.model.model_name,
                 'basic_price'   : round(car.basic_price, 0),
@@ -26,13 +35,14 @@ class PriceView(View):
                 'img_url'       : car.img_url
             } for car in list(cars.cartypeprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':type_list}, status=200)
+            return JsonResponse({'data':model_data}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
 
 class TotalPriceView(View):
     SAVING_COST = 6800000
+
     def get(self, request, model_id):
         total_price = 0
         order = CarOrderPrices.objects.get(id=model_id)
@@ -64,7 +74,7 @@ class TotalPriceView(View):
             'saving_price'   : round(order.saving_price, 0),
         }
 
-        return JsonResponse({'message':'SUCCESS', 'price':prices}, status=200)
+        return JsonResponse({'price':prices}, status=200)
 
 class ColorPriceView(View):
     def get(self, request, model_id):
@@ -79,7 +89,7 @@ class ColorPriceView(View):
                 'img_url'     : car.color.img_url,
             } for car in list(cars.carcolorprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':color_list}, status=200)
+            return JsonResponse({'data':color_list}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
@@ -91,10 +101,10 @@ class ColorPriceView(View):
             order = CarOrderPrices.objects.get(id=model_id)
             order.color = CarColors.objects.get(id=data['color_id'])
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return HttpResponse(status=200)
+            
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
-        return JsonResponse({'message':'SUCCESS'}, status=200)
 
 class CarTypeView(View):
     def post(self, request, model_id):
@@ -103,10 +113,10 @@ class CarTypeView(View):
             order = CarOrderPrices.objects.get(id=model_id)
             order.type = CarTypes.objects.get(id=data['type_id'])
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return HttpResponse(status=200)
+            
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
-        return JsonResponse({'message':'SUCCESS'}, status=200)
 
 class CarSeatPrice(View):
 
@@ -121,7 +131,8 @@ class CarSeatPrice(View):
                 'seat_price' : round(car.seat_price, 0)
             } for car in list(cars.carseatprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':seat_list}, status=200)
+            return JsonResponse({'data':seat_list}, status=200)
+
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
 
@@ -138,7 +149,7 @@ class WheelPriceView(View):
                 'wheel_price' : round(car.wheel_price, 0)
             } for car in list(cars.carwheelprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':wheel_list}, status=200)
+            return JsonResponse({'data':wheel_list}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
@@ -150,10 +161,10 @@ class WheelPriceView(View):
             order = CarOrderPrices.objects.get(id=model_id)
             order.wheel = CarWheels.objects.get(id=data['wheel_id'])
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return HttpResponse(status=200)
+            
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
-        return JsonResponse({'message':'SUCCESS'}, status=200)
 
 class InteriorPriceView(View):
 
@@ -170,7 +181,7 @@ class InteriorPriceView(View):
                 'descriptions'     : car.descriptions
             } for car in list(cars.carinteriorprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':interior_list}, status=200)
+            return JsonResponse({'data':interior_list}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
@@ -182,10 +193,10 @@ class InteriorPriceView(View):
             order = CarOrderPrices.objects.get(id=model_id)
             order.interior = CarInteriors.objects.get(id=data['interior_id'])
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
+            return HttpResponse(status=200)
+            
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
-        return JsonResponse({'message':'SUCCESS'}, status=200)
 
 class SpecificationView(View):
 
@@ -203,7 +214,7 @@ class SpecificationView(View):
                 'included_options' : car.included_options
             } for car in list(cars.cartypeprices_set.all())]
 
-            return JsonResponse({'message':'SUCCESS','data':spec_list}, status=200)
+            return JsonResponse({'data':spec_list}, status=200)
 
         except CarModels.DoesNotExist:
             return JsonResponse({'message':'INVALID_MODEL'}, status = 400)
@@ -213,39 +224,41 @@ class CarPaymentOptionView(View):
     def get(self, request, model_id):
         try:
             order = CarOrderPrices.objects.get(id=model_id)
+
             if order.payment.option != 'cash':
                 prices = {
                     'monthly_cost' : round(order.expected_price/order.payment.month, 0),
                     'saving_cost'  : round(order.saving_price/order.payment.month, 0)
                 }
-                return JsonResponse({'message':'SUCCESS', 'data':prices}, status=200)
-            else:
-                return JsonResponse({'message':'NOT_SUPPORTED_FOR_CASH'}, status = 400)
+                return JsonResponse({'data':prices}, status=200)
+
+            return JsonResponse({'message':'NOT_SUPPORTED_FOR_CASH'}, status = 400)
         
         except ZeroDivisionError:
             return JsonResponse({'message':'SELECT_PAYMENTOPTION_FIRST'}, status = 400)
 
     def post(self, request, model_id):
         data = json.loads(request.body)
+
         if 'option' in data and 'month' in data:
             order = CarOrderPrices.objects.get(id=model_id)
             order.payment = CarPaymentOptions.objects.filter(option=data['option']).get(month=data['month'])
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
-
-        return JsonResponse({'message':'SUCCESS'}, status=200)
+            return HttpResponse(status=200)
+            
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
 
 class CarAutoPilotView(View):
+    AUTO_SELECTED = 2
+    AUTO_NOT_SELECTED = 1
 
     def post(self, request, model_id):
         data = json.loads(request.body)
 
         if 'autopilot' in data:
             order = CarOrderPrices.objects.get(id=model_id)
-            order.autopilot_price = CarAutoPilots.objects.get(id = 2 if data['autopilot'] == 'True' else 1)
+            order.autopilot_price = CarAutoPilots.objects.get(id = self.AUTO_SELECTED if data['autopilot'] == 'True' else self.AUTO_NOT_SELECTED)
             order.save()
-        else:
-            return JsonResponse({'message':'INVALID_KEY'}, status=400)
-
-        return JsonResponse({'message':'SUCCESS'}, status=200)
+            return HttpResponse(status=200)
+        
+        return JsonResponse({'message':'INVALID_KEY'}, status=400)
