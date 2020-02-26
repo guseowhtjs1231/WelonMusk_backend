@@ -67,3 +67,8 @@ class SignInView(View):
             return JsonResponse({'message':'INVALID_USER'}, status = 400)
         except KeyError:
             return JsonResponse({'message':'INVALID_KEY'}, status = 400)
+
+class SignUp2(View):
+    def post(self, request):
+	return
+
