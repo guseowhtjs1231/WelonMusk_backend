@@ -27,16 +27,17 @@ class SignUpView(View):
 
         try:
             validate_email(data['email'])
-            password_error = checkPassword(data['password'])
+            if Users.objects.filter(email = data['email']).exists():
+                return JsonResponse( {'message' : "ALREADY_EXISTS"}, status=400)
 
+            password_error = checkPassword(data['password'])
             if password_error != None:
                 return JsonResponse({'message': password_error}, status = 400)
 
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
 
             Users(
-                first_name = data['first_name'],
-                last_name = data['last_name'],
+                name     = data['name'],
                 email    = data['email'],
                 password = hashed_password.decode('utf-8')
             ).save()
